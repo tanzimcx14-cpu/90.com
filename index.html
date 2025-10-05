@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Main Website</title>
+<style>
+body { font-family: Arial; margin: 0; padding: 0; background: #e8f5e9; }
+header { background: #2e7d32; color: white; padding: 20px; text-align: center; font-size: 24px; }
+.button-container { display: flex; flex-direction: column; align-items: center; padding: 20px; gap: 15px; }
+.btn { background: #4caf50; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-size: 18px; width: 80%; text-align: center; }
+.btn:hover { background: #45a049; }
+</style>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+</head>
+<body>
+
+<header id="headerText">Loading...</header>
+
+<div class="button-container" id="buttonContainer"></div>
+
+<script>
+const firebaseConfig = {
+    apiKey: "AIzaSyCtDWs_Ft0e2NcU-dtwaWPfy-gAXa0azQg",
+    authDomain: "tanzim-main-admin-app.firebaseapp.com",
+    databaseURL: "https://tanzim-main-admin-app-default-rtdb.firebaseio.com",
+    projectId: "tanzim-main-admin-app",
+    storageBucket: "tanzim-main-admin-app.appspot.com",
+    messagingSenderId: "12436676722",
+    appId: "1:12436676722:web:f066ffbc343f0117eea2eb"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+function loadData() {
+    db.ref('website').once('value').then(snapshot => {
+        const data = snapshot.val();
+        if (data) {
+            document.getElementById('headerText').innerText = data.header;
+            const container = document.getElementById('buttonContainer');
+            container.innerHTML = "";
+            data.buttons.forEach(btn => {
+                const a = document.createElement('a');
+                a.href = btn.link;
+                a.className = "btn";
+                a.innerText = btn.name;
+                a.target = "_blank";
+                container.appendChild(a);
+            });
+        }
+    });
+}
+
+loadData();
+</script>
+</body>
+</html>
